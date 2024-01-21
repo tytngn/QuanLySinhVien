@@ -4,7 +4,7 @@
  */
 package controller;
 
-import view.DM_MonHoc;
+import view.DM_TTSV;
 
 /**
  *
@@ -12,6 +12,6 @@ import view.DM_MonHoc;
  */
 public class Program {
     public static void main(String[] args) {
-        DM_MonHoc.getInstance();
+        DM_TTSV.getInstance();
     }
 }

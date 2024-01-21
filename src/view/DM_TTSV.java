@@ -16,25 +16,25 @@ import javax.swing.JLabel;
  *
  * @author nguyenthituyetngan
  */
-public class DM_MonHoc extends javax.swing.JFrame {
+public class DM_TTSV extends javax.swing.JFrame {
 
-    private static DM_MonHoc instance;
+    private static DM_TTSV instance;
 
     private DrawerController drawer;
 
-    public static synchronized DM_MonHoc getInstance() {
+    public static synchronized DM_TTSV getInstance() {
         if (instance == null) {
-            instance = new DM_MonHoc();
+            instance = new DM_TTSV();
         }
         instance.setVisible(true);
         return instance;
     }
-
+    
     private static void closeThisUI() {
         instance.dispose();
     }
-    
-    public DM_MonHoc() {
+
+    public DM_TTSV() {
         initComponents();
 
         drawer = Drawer.newDrawer(this)
@@ -51,14 +51,13 @@ public class DM_MonHoc extends javax.swing.JFrame {
                     public void selected(int i, DrawerItem di) {
                         //di.initMouseOver();
                         di.effectColor(new Color(200, 75, 49)).build();
-                        
-                        if (i == 0) {
-                            closeThisUI();
-                            DM_TTSV.getInstance();
-                        }
                         if (i == 1){
                             closeThisUI();
                             DM_LopHoc.getInstance();
+                        }
+                        if (i == 2){
+                            closeThisUI();
+                            DM_MonHoc.getInstance();
                         }
                         if (i == 3) {
                             System.exit(0);
@@ -87,8 +86,12 @@ public class DM_MonHoc extends javax.swing.JFrame {
         LeftPanel = new javax.swing.JPanel();
         MSSVLabel = new javax.swing.JLabel();
         HoTenLabel = new javax.swing.JLabel();
+        NamSinhLabel = new javax.swing.JLabel();
+        MaLopLabel = new javax.swing.JLabel();
         MSSVTextField = new javax.swing.JTextField();
         HoTenTextField = new javax.swing.JTextField();
+        NamSinhTextField = new javax.swing.JTextField();
+        MaLopTextField = new javax.swing.JTextField();
         ThemButton = new javax.swing.JButton();
         SuaButton = new javax.swing.JButton();
         XoaButton = new javax.swing.JButton();
@@ -120,7 +123,7 @@ public class DM_MonHoc extends javax.swing.JFrame {
         TitleLabel.setBackground(new java.awt.Color(236, 219, 186));
         TitleLabel.setFont(new java.awt.Font("Lao MN", 1, 36)); // NOI18N
         TitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        TitleLabel.setText("DANH MỤC MÔN HỌC");
+        TitleLabel.setText("THÔNG TIN SINH VIÊN");
 
         MenuLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         MenuLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asserts/menu-icon.png"))); // NOI18N
@@ -155,10 +158,16 @@ public class DM_MonHoc extends javax.swing.JFrame {
         LeftPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         MSSVLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
-        MSSVLabel.setText("Mã môn học");
+        MSSVLabel.setText("Mã số sinh viên");
 
         HoTenLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
-        HoTenLabel.setText("Tên môn học");
+        HoTenLabel.setText("Họ và tên");
+
+        NamSinhLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        NamSinhLabel.setText("Năm sinh");
+
+        MaLopLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        MaLopLabel.setText("Mã lớp");
 
         ThemButton.setFont(new java.awt.Font("Helvetica", 1, 16)); // NOI18N
         ThemButton.setText("Thêm");
@@ -201,11 +210,15 @@ public class DM_MonHoc extends javax.swing.JFrame {
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(LeftPanelLayout.createSequentialGroup()
                         .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(NamSinhLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(HoTenLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(MSSVLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(MSSVLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(MaLopLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(35, 35, 35)
                         .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(HoTenTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                            .addComponent(NamSinhTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                            .addComponent(MaLopTextField)
+                            .addComponent(HoTenTextField)
                             .addComponent(MSSVTextField)))
                     .addGroup(LeftPanelLayout.createSequentialGroup()
                         .addComponent(ThemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -228,26 +241,35 @@ public class DM_MonHoc extends javax.swing.JFrame {
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(HoTenLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(HoTenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(248, 248, 248)
+                .addGap(60, 60, 60)
+                .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(NamSinhLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NamSinhTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(60, 60, 60)
+                .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MaLopLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MaLopTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ThemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SuaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(HuyBoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(XoaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         RightPanel.setBackground(new java.awt.Color(255, 255, 255));
 
+        jTable1.setFont(new java.awt.Font("Helvetica", 0, 13)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Mã môn học", "Tên môn học"
+                "Mã số sinh viên", "Họ và tên", "Năm sinh", "Mã lớp"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -336,8 +358,12 @@ public class DM_MonHoc extends javax.swing.JFrame {
     private javax.swing.JPanel LeftPanel;
     private javax.swing.JLabel MSSVLabel;
     private javax.swing.JTextField MSSVTextField;
+    private javax.swing.JLabel MaLopLabel;
+    private javax.swing.JTextField MaLopTextField;
     private javax.swing.JLabel MenuLabel;
     private javax.swing.JPanel MiddelPanel1;
+    private javax.swing.JLabel NamSinhLabel;
+    private javax.swing.JTextField NamSinhTextField;
     private javax.swing.JPanel RightPanel;
     private javax.swing.JButton SuaButton;
     private javax.swing.JButton ThemButton;

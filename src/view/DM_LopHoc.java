@@ -16,15 +16,15 @@ import javax.swing.JLabel;
  *
  * @author nguyenthituyetngan
  */
-public class DM_MonHoc extends javax.swing.JFrame {
+public class DM_LopHoc extends javax.swing.JFrame {
 
-    private static DM_MonHoc instance;
+    private static DM_LopHoc instance;
 
     private DrawerController drawer;
 
-    public static synchronized DM_MonHoc getInstance() {
+    public static synchronized DM_LopHoc getInstance() {
         if (instance == null) {
-            instance = new DM_MonHoc();
+            instance = new DM_LopHoc();
         }
         instance.setVisible(true);
         return instance;
@@ -33,8 +33,8 @@ public class DM_MonHoc extends javax.swing.JFrame {
     private static void closeThisUI() {
         instance.dispose();
     }
-    
-    public DM_MonHoc() {
+
+    public DM_LopHoc() {
         initComponents();
 
         drawer = Drawer.newDrawer(this)
@@ -51,14 +51,13 @@ public class DM_MonHoc extends javax.swing.JFrame {
                     public void selected(int i, DrawerItem di) {
                         //di.initMouseOver();
                         di.effectColor(new Color(200, 75, 49)).build();
-                        
                         if (i == 0) {
                             closeThisUI();
                             DM_TTSV.getInstance();
                         }
-                        if (i == 1){
+                        if (i == 2) {
                             closeThisUI();
-                            DM_LopHoc.getInstance();
+                            DM_MonHoc.getInstance();
                         }
                         if (i == 3) {
                             System.exit(0);
@@ -120,7 +119,7 @@ public class DM_MonHoc extends javax.swing.JFrame {
         TitleLabel.setBackground(new java.awt.Color(236, 219, 186));
         TitleLabel.setFont(new java.awt.Font("Lao MN", 1, 36)); // NOI18N
         TitleLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        TitleLabel.setText("DANH MỤC MÔN HỌC");
+        TitleLabel.setText("DANH MỤC LỚP HỌC");
 
         MenuLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         MenuLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asserts/menu-icon.png"))); // NOI18N
@@ -155,10 +154,10 @@ public class DM_MonHoc extends javax.swing.JFrame {
         LeftPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         MSSVLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
-        MSSVLabel.setText("Mã môn học");
+        MSSVLabel.setText("Mã lớp");
 
         HoTenLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
-        HoTenLabel.setText("Tên môn học");
+        HoTenLabel.setText("Tên lớp");
 
         ThemButton.setFont(new java.awt.Font("Helvetica", 1, 16)); // NOI18N
         ThemButton.setText("Thêm");
@@ -201,7 +200,7 @@ public class DM_MonHoc extends javax.swing.JFrame {
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(LeftPanelLayout.createSequentialGroup()
                         .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(HoTenLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(HoTenLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
                             .addComponent(MSSVLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(35, 35, 35)
                         .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -247,7 +246,7 @@ public class DM_MonHoc extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Mã môn học", "Tên môn học"
+                "Mã lớp", "Tên lớp"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
