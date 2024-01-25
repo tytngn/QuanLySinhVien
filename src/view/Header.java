@@ -30,14 +30,16 @@ public class Header extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
-        setBackground(new java.awt.Color(52, 103, 81));
+        setBackground(new java.awt.Color(20, 85, 65));
 
         jLabel3.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("QUẢN LÝ ");
         jLabel3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         jLabel1.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("SINH VIÊN");
 
