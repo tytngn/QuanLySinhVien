@@ -4,6 +4,7 @@
  */
 package view;
 
+import controller.Document;
 import controller.Program;
 import static controller.Program.connection;
 import java.awt.Color;
@@ -16,6 +17,7 @@ import javax.swing.JLabel;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
 
 /**
  *
@@ -27,7 +29,8 @@ public class DM_LopHoc extends javax.swing.JFrame {
 
     private DrawerController drawer;
 
-    
+    private boolean stt = true;
+    private Object selected = new Object();
 
     public static synchronized DM_LopHoc getInstance() {
         if (instance == null) {
@@ -48,18 +51,19 @@ public class DM_LopHoc extends javax.swing.JFrame {
         drawer = Drawer.newDrawer(this)
                 .header(new Header())
                 .separator(2, Color.BLACK)
-                .drawerBackground(new Color(244, 242, 229))
+                .drawerBackground(new Color(255, 255, 255))
                 .enableScroll(true)
                 .space(30)
                 .addChild(new DrawerItem("THÔNG TIN SINH VIÊN").icon(new ImageIcon(getClass().getResource("/asserts/Folder-Desktop-icon.png"))).build())
                 .addChild(new DrawerItem("DANH MỤC LỚP HỌC").icon(new ImageIcon(getClass().getResource("/asserts/Folder-Desktop-icon.png"))).build())
                 .addChild(new DrawerItem("DANH MỤC MÔN HỌC").icon(new ImageIcon(getClass().getResource("/asserts/Folder-Desktop-icon.png"))).build())
+                .addChild(new DrawerItem("BẢNG ĐIỂM HỌC KỲ").icon(new ImageIcon(getClass().getResource("/asserts/Folder-Desktop-icon.png"))).build())
                 .addFooter(new DrawerItem("THOÁT").icon(new ImageIcon(getClass().getResource("/asserts/exit-icon.png"))).build())
                 .event(new EventDrawer() {
                     @Override
                     public void selected(int i, DrawerItem di) {
                         //di.initMouseOver();
-                        di.effectColor(new Color(20, 85, 65)).build();
+                        di.effectColor(new Color(128, 188, 189)).build();
                         if (i == 0) {
                             closeThisUI();
                             DM_TTSV.getInstance();
@@ -69,6 +73,10 @@ public class DM_LopHoc extends javax.swing.JFrame {
                             DM_MonHoc.getInstance();
                         }
                         if (i == 3) {
+                            closeThisUI();
+                            BangDiem.getInstance();
+                        }
+                        if (i == 4) {
                             System.exit(0);
                         }
 
@@ -93,28 +101,23 @@ public class DM_LopHoc extends javax.swing.JFrame {
                 Object[] obj = {rs.getString(1), rs.getString(2)};
                 m.addRow(obj);
             }
+
+            setValueTF();
             s.close();
         } catch (Exception e) {
         }
 
     }
-    
+
     private void setTF() {
         MaLopTextField.setText("");
         TenLopTextField.setText("");
     }
 
-//    public void connectToDatabase() {
-//        // Thực hiện kết nối đến cơ sở dữ liệu
-//        try {
-//            String url = "jdbc:mysql://localhost:3306/QLSV";
-//            String username = "root";
-//            String password = "123Abc@@";
-//            connection = DriverManager.getConnection(url, username, password);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void setValueTF() {
+        ((AbstractDocument) MaLopTextField.getDocument()).setDocumentFilter(new Document.MaSoDocumentFilter());
+        ((AbstractDocument) TenLopTextField.getDocument()).setDocumentFilter(new Document.VNDocumentFilter());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -131,8 +134,8 @@ public class DM_LopHoc extends javax.swing.JFrame {
         MenuLabel = new javax.swing.JLabel();
         UnderPanel = new javax.swing.JPanel();
         LeftPanel = new javax.swing.JPanel();
-        MSSVLabel = new javax.swing.JLabel();
-        HoTenLabel = new javax.swing.JLabel();
+        MaLopLabel = new javax.swing.JLabel();
+        TenLopLabel = new javax.swing.JLabel();
         MaLopTextField = new javax.swing.JTextField();
         TenLopTextField = new javax.swing.JTextField();
         ThemButton = new javax.swing.JButton();
@@ -158,6 +161,7 @@ public class DM_LopHoc extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(236, 219, 186));
         setMinimumSize(new java.awt.Dimension(1136, 650));
+        setResizable(false);
         setSize(new java.awt.Dimension(1136, 547));
 
         HeaderPanel.setBackground(new java.awt.Color(247, 104, 2));
@@ -196,23 +200,27 @@ public class DM_LopHoc extends javax.swing.JFrame {
                 .addGap(18, 18, 18))
         );
 
-        UnderPanel.setBackground(new java.awt.Color(244, 242, 229));
+        UnderPanel.setBackground(new java.awt.Color(249, 247, 201));
 
-        LeftPanel.setBackground(new java.awt.Color(244, 242, 229));
+        LeftPanel.setBackground(new java.awt.Color(249, 247, 201));
 
-        MSSVLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
-        MSSVLabel.setText("Mã lớp");
+        MaLopLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        MaLopLabel.setText("Mã lớp");
 
-        HoTenLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
-        HoTenLabel.setText("Tên lớp");
+        TenLopLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        TenLopLabel.setText("Tên lớp");
 
+        MaLopTextField.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
         MaLopTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MaLopTextFieldActionPerformed(evt);
             }
         });
 
-        ThemButton.setFont(new java.awt.Font("Helvetica", 1, 16)); // NOI18N
+        TenLopTextField.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
+
+        ThemButton.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        ThemButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asserts/icons8-add-file-20.png"))); // NOI18N
         ThemButton.setText("Thêm");
         ThemButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -220,7 +228,8 @@ public class DM_LopHoc extends javax.swing.JFrame {
             }
         });
 
-        SuaButton.setFont(new java.awt.Font("Helvetica", 1, 16)); // NOI18N
+        SuaButton.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        SuaButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asserts/icons8-edit-text-file-20.png"))); // NOI18N
         SuaButton.setText("Sửa");
         SuaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,7 +237,8 @@ public class DM_LopHoc extends javax.swing.JFrame {
             }
         });
 
-        XoaButton.setFont(new java.awt.Font("Helvetica", 1, 16)); // NOI18N
+        XoaButton.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        XoaButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asserts/icons8-trash-20.png"))); // NOI18N
         XoaButton.setText("Xoá");
         XoaButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,43 +252,43 @@ public class DM_LopHoc extends javax.swing.JFrame {
             LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(LeftPanelLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(LeftPanelLayout.createSequentialGroup()
-                        .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(HoTenLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
-                            .addComponent(MSSVLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(35, 35, 35)
-                        .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(TenLopTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                        .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(MaLopLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(TenLopLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TenLopTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
                             .addComponent(MaLopTextField)))
                     .addGroup(LeftPanelLayout.createSequentialGroup()
-                        .addComponent(ThemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
-                        .addComponent(SuaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                        .addComponent(XoaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(74, Short.MAX_VALUE))
+                        .addComponent(ThemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(SuaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(XoaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         LeftPanelLayout.setVerticalGroup(
             LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(LeftPanelLayout.createSequentialGroup()
                 .addGap(60, 60, 60)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(MSSVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MaLopLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MaLopTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(60, 60, 60)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(HoTenLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TenLopLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(TenLopTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(248, 248, 248)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ThemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(SuaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(XoaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(64, Short.MAX_VALUE))
+                    .addComponent(ThemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SuaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(XoaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50))
         );
 
-        RightPanel.setBackground(new java.awt.Color(244, 242, 229));
+        RightPanel.setBackground(new java.awt.Color(249, 247, 201));
 
         jTable1.setAutoCreateRowSorter(true);
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -310,15 +320,15 @@ public class DM_LopHoc extends javax.swing.JFrame {
             RightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RightPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 636, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 609, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         RightPanelLayout.setVerticalGroup(
             RightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(RightPanelLayout.createSequentialGroup()
                 .addGap(60, 60, 60)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout UnderPanelLayout = new javax.swing.GroupLayout(UnderPanel);
@@ -378,8 +388,8 @@ public class DM_LopHoc extends javax.swing.JFrame {
             String t = TenLopTextField.getText();
             s.executeUpdate("INSERT INTO QLSV.DM_Lop (MaLop, TenLop) VALUES ('" + m + "','" + t + "');");
             s.close();
-            reload();
             setTF();
+            reload();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ, vui lòng kiểm tra lại!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
 
@@ -387,20 +397,63 @@ public class DM_LopHoc extends javax.swing.JFrame {
     }//GEN-LAST:event_ThemButtonActionPerformed
 
     private void SuaButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SuaButtonActionPerformed
-        try {
-            Statement s = connection.createStatement();
+        if (stt == true) {
             int r = jTable1.getSelectedRow();
-            Object m = jTable1.getModel().getValueAt(r, 0);
 
-            int x = s.executeUpdate("UPDATE `QLSV`.`DM_Lop` SET `MaLop` = 'B01' WHERE (`MaLop` = 'hdhs');");
-            if (x == 1) {
-                JOptionPane.showMessageDialog(this, "Xóa thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            if (r == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                return;
             }
-            s.close();
-            reload();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+            try {
+                Statement s = connection.createStatement();
 
+                Object malop = jTable1.getModel().getValueAt(r, 0);
+                Object tenlop = jTable1.getModel().getValueAt(r, 1);
+
+                MaLopTextField.setText((String) malop);
+                TenLopTextField.setText((String) tenlop);
+
+                selected = malop;
+                stt = false;
+                jTable1.setEnabled(false);
+                ThemButton.setEnabled(false);
+                XoaButton.setEnabled(false);
+                SuaButton.setText("Cập nhật");
+                return;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (stt == false) {
+            if (MaLopTextField.getText().equals("")) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (TenLopTextField.getText().equals("")) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                Statement s = connection.createStatement();
+                String ml = MaLopTextField.getText();
+                String tl = TenLopTextField.getText();
+
+                s.executeUpdate("UPDATE `QLSV`.`DM_Lop` SET `MaLop` = '" + ml + "', `TenLop` = '" + tl + "' WHERE (`MaLop` = '" + selected + "');");
+                s.close();
+                stt = true;
+                jTable1.setEnabled(true);
+                ThemButton.setEnabled(true);
+                XoaButton.setEnabled(true);
+                SuaButton.setText("Sửa");
+                reload();
+                setTF();
+                return;
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ, vui lòng kiểm tra lại!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+
+            }
         }
     }//GEN-LAST:event_SuaButtonActionPerformed
 
@@ -429,14 +482,14 @@ public class DM_LopHoc extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel HeaderPanel;
-    private javax.swing.JLabel HoTenLabel;
     private javax.swing.JPanel LeftPanel;
-    private javax.swing.JLabel MSSVLabel;
+    private javax.swing.JLabel MaLopLabel;
     private javax.swing.JTextField MaLopTextField;
     private javax.swing.JLabel MenuLabel;
     private javax.swing.JPanel MiddelPanel1;
     private javax.swing.JPanel RightPanel;
     private javax.swing.JButton SuaButton;
+    private javax.swing.JLabel TenLopLabel;
     private javax.swing.JTextField TenLopTextField;
     private javax.swing.JButton ThemButton;
     private javax.swing.JLabel TitleLabel;
