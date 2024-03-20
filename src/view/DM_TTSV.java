@@ -116,11 +116,10 @@ public class DM_TTSV extends javax.swing.JFrame {
     private void setTF() {
         MSSVTextField.setText("");
         HoTenTextField.setText("");
-        NamSinhTextField.setText("");
         MLopComboBox.setSelectedItem("- Mã lớp -");
     }
 
-    public void reloadMaLop() {
+    private void reloadMaLop() {
         try {
             Statement s = connection.createStatement();
             ResultSet rs = s.executeQuery("SELECT MaLop FROM QLSV.DM_Lop;");
@@ -140,7 +139,6 @@ public class DM_TTSV extends javax.swing.JFrame {
     public void setValueTF() {
         ((AbstractDocument) MSSVTextField.getDocument()).setDocumentFilter(new Document.MaSoDocumentFilter());
         ((AbstractDocument) HoTenTextField.getDocument()).setDocumentFilter(new Document.VNDocumentFilter());
-        ((AbstractDocument) NamSinhTextField.getDocument()).setDocumentFilter(new Document.NumberDocumentFilter());
     }
 
     /**
@@ -164,11 +162,11 @@ public class DM_TTSV extends javax.swing.JFrame {
         MaLopLabel = new javax.swing.JLabel();
         MSSVTextField = new javax.swing.JTextField();
         HoTenTextField = new javax.swing.JTextField();
-        NamSinhTextField = new javax.swing.JTextField();
         ThemButton = new javax.swing.JButton();
         SuaButton = new javax.swing.JButton();
         XoaButton = new javax.swing.JButton();
         MLopComboBox = new javax.swing.JComboBox<>();
+        NamSinhComboBox = new javax.swing.JComboBox<>();
         RightPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -248,13 +246,6 @@ public class DM_TTSV extends javax.swing.JFrame {
 
         HoTenTextField.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
 
-        NamSinhTextField.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
-        NamSinhTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NamSinhTextFieldActionPerformed(evt);
-            }
-        });
-
         ThemButton.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         ThemButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/asserts/icons8-add-file-20.png"))); // NOI18N
         ThemButton.setText("Thêm");
@@ -285,6 +276,12 @@ public class DM_TTSV extends javax.swing.JFrame {
 
         MLopComboBox.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
 
+        for (int year = 1950; year <= 2005; year++) {
+            NamSinhComboBox.setSelectedItem(null);
+            NamSinhComboBox.addItem(String.valueOf(year));
+        }
+        NamSinhComboBox.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
+
         javax.swing.GroupLayout LeftPanelLayout = new javax.swing.GroupLayout(LeftPanel);
         LeftPanel.setLayout(LeftPanelLayout);
         LeftPanelLayout.setHorizontalGroup(
@@ -304,10 +301,10 @@ public class DM_TTSV extends javax.swing.JFrame {
                         .addComponent(SuaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(XoaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(MSSVTextField)
-                    .addComponent(HoTenTextField)
-                    .addComponent(NamSinhTextField)
-                    .addComponent(MLopComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(HoTenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NamSinhComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MLopComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(MSSVTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         LeftPanelLayout.setVerticalGroup(
@@ -324,8 +321,8 @@ public class DM_TTSV extends javax.swing.JFrame {
                 .addGap(60, 60, 60)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(NamSinhLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NamSinhTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
+                    .addComponent(NamSinhComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(61, 61, 61)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MaLopLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MLopComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -438,20 +435,20 @@ public class DM_TTSV extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (NamSinhTextField.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+        if (NamSinhComboBox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        String NamSinh = NamSinhTextField.getText();
-        try {
-            int year = Integer.parseInt(NamSinh);
-            if (year < 1900 || year > 2024) {
-                JOptionPane.showMessageDialog(this, "Dữ liệu năm sinh không hợp lệ!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        String NamSinh = NamSinhTextField.getText();
+//        try {
+//            int year = Integer.parseInt(NamSinh);
+//            if (year < 1900 || year > 2024) {
+//                JOptionPane.showMessageDialog(this, "Dữ liệu năm sinh không hợp lệ!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+//                return;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         if (MLopComboBox.getSelectedItem().toString().equals("- Mã lớp -")) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
@@ -460,7 +457,7 @@ public class DM_TTSV extends javax.swing.JFrame {
             Statement s = connection.createStatement();
             String mssv = MSSVTextField.getText();
             String ht = HoTenTextField.getText();
-            String ns = NamSinhTextField.getText();
+            String ns = NamSinhComboBox.getSelectedItem().toString();
             String ml = MLopComboBox.getSelectedItem().toString();
             s.executeUpdate("INSERT INTO `QLSV`.`SINHVIEN` (`MaSV`, `TenSV`, `NamSinh`, `MaLop`) VALUES ('" + mssv
                     + "', '" + ht + "', '" + ns + "', '" + ml + "');");
@@ -496,7 +493,7 @@ public class DM_TTSV extends javax.swing.JFrame {
 
                 MSSVTextField.setText((String) mssv);
                 HoTenTextField.setText((String) hten);
-                NamSinhTextField.setText((String) ns);
+                NamSinhComboBox.setSelectedItem((String) ns);
                 MLopComboBox.setSelectedItem(lop);
                 selected = mssv;
                 stt = false;
@@ -520,20 +517,20 @@ public class DM_TTSV extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if (NamSinhTextField.getText().equals("")) {
+            if (NamSinhComboBox.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập dữ liệu!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            String NamSinh = NamSinhTextField.getText();
-            try {
-                int year = Integer.parseInt(NamSinh);
-                if (year <= 1900 || year >= 2024) {
-                    JOptionPane.showMessageDialog(this, "Dữ liệu năm sinh không hợp lệ!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            String NamSinh = NamSinhTextField.getText();
+//            try {
+//                int year = Integer.parseInt(NamSinh);
+//                if (year <= 1900 || year >= 2024) {
+//                    JOptionPane.showMessageDialog(this, "Dữ liệu năm sinh không hợp lệ!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
             if (MLopComboBox.getSelectedItem().toString().equals("- Mã lớp -")) {
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -542,7 +539,7 @@ public class DM_TTSV extends javax.swing.JFrame {
                 Statement s = connection.createStatement();
                 String mssv = MSSVTextField.getText();
                 String ht = HoTenTextField.getText();
-                String ns = NamSinhTextField.getText();
+                String ns = NamSinhComboBox.getSelectedItem().toString();
                 String ml = MLopComboBox.getSelectedItem().toString();
                 s.executeUpdate("UPDATE `QLSV`.`SINHVIEN` SET `MaSV` = '" + mssv
                         + "', `TenSV` = '" + ht + "', `NamSinh` = '" + ns
@@ -583,6 +580,7 @@ public class DM_TTSV extends javax.swing.JFrame {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         int e = evt.getClickCount();
+        // Khi nháy đúp chuột
         if (e == 2) {
             int r = jTable1.getSelectedRow();
 
@@ -591,12 +589,12 @@ public class DM_TTSV extends javax.swing.JFrame {
                 return;
             }
 
+            Object mssv = jTable1.getModel().getValueAt(r, 0);
+            NhapDiem nhapDiemDialog = new NhapDiem(this, rootPaneCheckingEnabled);
+            nhapDiemDialog.loadDatafromSV(mssv);
+            nhapDiemDialog.setVisible(true);
         }
     }//GEN-LAST:event_jTable1MouseClicked
-
-    private void NamSinhTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NamSinhTextFieldActionPerformed
-
-    }//GEN-LAST:event_NamSinhTextFieldActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -610,8 +608,8 @@ public class DM_TTSV extends javax.swing.JFrame {
     private javax.swing.JLabel MaLopLabel;
     private javax.swing.JLabel MenuLabel;
     private javax.swing.JPanel MiddelPanel1;
+    private javax.swing.JComboBox<String> NamSinhComboBox;
     private javax.swing.JLabel NamSinhLabel;
-    private javax.swing.JTextField NamSinhTextField;
     private javax.swing.JPanel RightPanel;
     private javax.swing.JButton SuaButton;
     private javax.swing.JButton ThemButton;

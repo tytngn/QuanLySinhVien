@@ -86,10 +86,10 @@ public class DM_LopHoc extends javax.swing.JFrame {
                 .build();
 
         Program.connectToDatabase();
-        reload();
+        reloadLop();
     }
 
-    private void reload() {
+    private void reloadLop() {
         try {
 
             Statement s = connection.createStatement();
@@ -389,7 +389,7 @@ public class DM_LopHoc extends javax.swing.JFrame {
             s.executeUpdate("INSERT INTO QLSV.DM_Lop (MaLop, TenLop) VALUES ('" + m + "','" + t + "');");
             s.close();
             setTF();
-            reload();
+            reloadLop();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ, vui lòng kiểm tra lại!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
 
@@ -447,7 +447,7 @@ public class DM_LopHoc extends javax.swing.JFrame {
                 ThemButton.setEnabled(true);
                 XoaButton.setEnabled(true);
                 SuaButton.setText("Sửa");
-                reload();
+                reloadLop();
                 setTF();
                 return;
             } catch (Exception e) {
@@ -468,7 +468,7 @@ public class DM_LopHoc extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Xóa thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
             s.close();
-            reload();
+            reloadLop();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
 

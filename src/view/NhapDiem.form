@@ -28,15 +28,15 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="HeaderPanel" max="32767" attributes="0"/>
-          <Component id="UnderPanel" alignment="0" max="32767" attributes="0"/>
+          <Component id="HeaderPanel" alignment="0" max="32767" attributes="0"/>
+          <Component id="UnderPanel" alignment="1" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <Component id="HeaderPanel" max="32767" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="HeaderPanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="UnderPanel" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -88,15 +88,15 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="TopPanel" max="32767" attributes="0"/>
-              <Component id="BottomPanel" alignment="0" max="32767" attributes="0"/>
+              <Component id="BottomPanel" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <Component id="TopPanel" max="32767" attributes="0"/>
+                  <Component id="TopPanel" min="-2" pref="197" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="BottomPanel" min="-2" max="-2" attributes="0"/>
+                  <Component id="BottomPanel" pref="192" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -115,67 +115,72 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="MaLopLabel" max="32767" attributes="0"/>
+                          <Component id="TenLopLabel" max="32767" attributes="0"/>
                           <Component id="MSSVLabel" max="32767" attributes="0"/>
                           <Component id="HoTenLabel" max="32767" attributes="0"/>
+                          <Component id="MaLopLabel" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="MSSVTextField" min="-2" pref="150" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                              <Component id="NamHocLabel" max="32767" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="NamHocComboBox" min="-2" pref="150" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="HoTenTextField" min="-2" pref="150" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                              <Component id="HocKyLabel" max="32767" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="HocKyComboBox" min="-2" pref="150" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="MLopComboBox" min="-2" pref="150" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                              <Component id="MonHocLabel" max="32767" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="MonHocComboBox" min="-2" pref="150" max="-2" attributes="0"/>
-                          </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="MLopComboBox" alignment="0" pref="220" max="32767" attributes="0"/>
+                          <Component id="MSSVTextField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="TenLopTextField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="HoTenTextField" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="MaMHLabel" alignment="0" max="32767" attributes="0"/>
+                          <Component id="NamHocLabel" alignment="0" max="32767" attributes="0"/>
+                          <Component id="MonHocLabel" max="32767" attributes="0"/>
+                          <Component id="HocKyLabel" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="NamHocComboBox" pref="220" max="32767" attributes="0"/>
+                          <Component id="MaMHComboBox" max="32767" attributes="0"/>
+                          <Component id="MonHocTextField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="HocKyComboBox" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="MSSVLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="MSSVTextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="NamHocLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="NamHocComboBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="HoTenLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="HoTenTextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="HocKyLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="HocKyComboBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                              <Component id="NamHocLabel" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                              <Component id="NamHocComboBox" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="MaLopLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="MLopComboBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="MSSVLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                              <Component id="MSSVTextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="MaMHLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="MaMHComboBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="HoTenLabel" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="HocKyLabel" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="HocKyComboBox" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="HoTenTextField" min="-2" pref="30" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="MaLopLabel" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="TenLopLabel" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="TenLopTextField" min="-2" pref="30" max="-2" attributes="0"/>
                           <Component id="MonHocLabel" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="MonHocComboBox" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="MLopComboBox" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="MonHocTextField" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -184,13 +189,14 @@
             <Component class="javax.swing.JLabel" name="MSSVLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="M&#xe3; s&#x1ed1; sinh vi&#xea;n"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="MSSVTextField">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="14" style="0"/>
                 </Property>
@@ -199,13 +205,14 @@
             <Component class="javax.swing.JLabel" name="HoTenLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="H&#x1ecd; v&#xe0; t&#xea;n"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="HoTenTextField">
               <Properties>
+                <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="14" style="0"/>
                 </Property>
@@ -214,7 +221,7 @@
             <Component class="javax.swing.JLabel" name="MaLopLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="M&#xe3; l&#x1edb;p"/>
               </Properties>
@@ -235,7 +242,7 @@
             <Component class="javax.swing.JLabel" name="NamHocLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="N&#x103;m h&#x1ecd;c"/>
               </Properties>
@@ -256,7 +263,7 @@
             <Component class="javax.swing.JLabel" name="HocKyLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="H&#x1ecd;c k&#x1ef3;"/>
               </Properties>
@@ -267,22 +274,27 @@
                   <Font name="Helvetica" size="14" style="0"/>
                 </Property>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
+                  <StringArray count="3">
+                    <StringItem index="0" value="1"/>
+                    <StringItem index="1" value="2"/>
+                    <StringItem index="2" value="h&#xe8;"/>
+                  </StringArray>
                 </Property>
+                <Property name="selectedIndex" type="int" value="-1"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Component class="javax.swing.JLabel" name="MonHocLabel">
+            <Component class="javax.swing.JLabel" name="MaMHLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="M&#xf4;n h&#x1ecd;c"/>
+                <Property name="text" type="java.lang.String" value="M&#xe3; m&#xf4;n h&#x1ecd;c"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="MonHocComboBox">
+            <Component class="javax.swing.JComboBox" name="MaMHComboBox">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="14" style="0"/>
@@ -291,9 +303,44 @@
                   <StringArray count="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="MaMHComboBoxItemStateChanged"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="TenLopLabel">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Helvetica" size="18" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="T&#xea;n l&#x1edb;p"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="TenLopTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Helvetica" size="14" style="0"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="MonHocLabel">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Helvetica" size="18" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="M&#xf4;n h&#x1ecd;c"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="MonHocTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Helvetica" size="14" style="0"/>
+                </Property>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -307,51 +354,59 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="ControlPanel" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="Diem1Label1" pref="118" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="Diem1Label" max="32767" attributes="0"/>
+                          <Component id="Diem1Label1" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="8" pref="8" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="Diem1TextField" min="-2" pref="220" max="-2" attributes="0"/>
+                          <Component id="Diem1TextField1" alignment="1" min="-2" pref="220" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="Diem2Label" min="-2" pref="105" max="-2" attributes="0"/>
+                          <Component id="Diem2Label1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="Diem1TextField" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
-                          <Component id="Diem1TextField1" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="Diem2TextField" pref="220" max="32767" attributes="0"/>
+                          <Component id="Diem2TextField1" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="Diem2Label1" max="32767" attributes="0"/>
-                          <Component id="Diem2Label" pref="110" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="Diem2TextField" alignment="1" min="-2" pref="150" max="-2" attributes="0"/>
-                          <Component id="Diem2TextField1" alignment="1" min="-2" pref="150" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="ControlPanel" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="Diem1Label" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="Diem1TextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="Diem2Label" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="Diem2TextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="Diem1Label" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="Diem1TextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="Diem2Label" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="Diem2TextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="Diem2Label1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="Diem2TextField1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="Diem1TextField1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="Diem1Label1" min="-2" pref="30" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="Diem1Label1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="Diem1TextField1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="Diem2Label1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="Diem2TextField1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="ControlPanel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -360,7 +415,7 @@
             <Component class="javax.swing.JLabel" name="Diem1Label">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x110;i&#x1ec3;m l&#x1ea7;n 1"/>
               </Properties>
@@ -368,7 +423,7 @@
             <Component class="javax.swing.JLabel" name="Diem2Label">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x110;i&#x1ec3;m l&#x1ea7;n 2"/>
               </Properties>
@@ -390,7 +445,7 @@
             <Component class="javax.swing.JLabel" name="Diem1Label1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="&#x110;i&#x1ec3;m trung b&#xec;nh"/>
               </Properties>
@@ -398,7 +453,7 @@
             <Component class="javax.swing.JLabel" name="Diem2Label1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="1"/>
+                  <Font name="Helvetica" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="X&#x1ebf;p lo&#x1ea1;i"/>
               </Properties>
@@ -428,13 +483,13 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
                           <Component id="LuuButton" min="-2" pref="103" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
                           <Component id="SuaButton" min="-2" pref="103" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="103" max="-2" attributes="0"/>
                           <Component id="XoaButton" min="-2" pref="103" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                          <EmptySpace pref="105" max="32767" attributes="0"/>
                           <Component id="ThoatButton" min="-2" pref="103" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                       </Group>
@@ -443,7 +498,7 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace pref="25" max="32767" attributes="0"/>
+                          <EmptySpace pref="24" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="LuuButton" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                               <Component id="SuaButton" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>

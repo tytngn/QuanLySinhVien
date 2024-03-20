@@ -257,7 +257,7 @@ public class BangDiem extends javax.swing.JFrame {
 
         HocKyComboBox.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Helvetica", 1, 24)); // NOI18N
         jButton1.setText("Liệt kê");
 
         javax.swing.GroupLayout LeftPanelLayout = new javax.swing.GroupLayout(LeftPanel);

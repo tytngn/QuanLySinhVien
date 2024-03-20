@@ -88,10 +88,10 @@ public class DM_MonHoc extends javax.swing.JFrame {
                 .build();
 
         Program.connectToDatabase();
-        reload();
+        reloadMH();
     }
 
-    private void reload() {
+    private void reloadMH() {
         try {
 
             Statement s = connection.createStatement();
@@ -388,7 +388,7 @@ public class DM_MonHoc extends javax.swing.JFrame {
             String t = TenMHTextField.getText();
             s.executeUpdate("INSERT INTO QLSV.DM_MonHoc (MaMH, TenMH) VALUES ('" + m + "','" + t + "');");
             s.close();
-            reload();
+            reloadMH();
             setTF();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ, vui lòng kiểm tra lại!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
@@ -447,7 +447,7 @@ public class DM_MonHoc extends javax.swing.JFrame {
                 ThemButton.setEnabled(true);
                 XoaButton.setEnabled(true);
                 SuaButton.setText("Sửa");
-                reload();
+                reloadMH();
                 setTF();
                 return;
             } catch (Exception e) {
@@ -468,7 +468,7 @@ public class DM_MonHoc extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Xóa thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
             s.close();
-            reload();
+            reloadMH();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
 
@@ -476,26 +476,7 @@ public class DM_MonHoc extends javax.swing.JFrame {
     }//GEN-LAST:event_XoaButtonActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-//        int e = evt.getClickCount();
-//        if (e == 2){
-//            int r = jTable1.getSelectedRow();
-//            
-//            if (r == -1) {
-//                JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-//                return;
-//            }
-//            
-//            try {
-//                Statement s = connection.createStatement();
-//
-//                Object maMH = jTable1.getModel().getValueAt(r, 0);
-//                Object tenMH = jTable1.getModel().getValueAt(r, 1);
-//                
-//                return;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+
     }//GEN-LAST:event_jTable1MouseClicked
 
 

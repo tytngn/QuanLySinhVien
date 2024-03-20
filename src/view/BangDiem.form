@@ -346,7 +346,7 @@
             <Component class="javax.swing.JButton" name="jButton1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="18" style="1"/>
+                  <Font name="Helvetica" size="24" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Li&#x1ec7;t k&#xea;"/>
               </Properties>

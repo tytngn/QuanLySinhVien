@@ -6,7 +6,11 @@ package view;
 
 import static controller.Program.connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,27 +26,109 @@ public class NhapDiem extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        
     }
     
-//    private void loadData(){
-//        try {
-//                Statement s = connection.createStatement();
-//
-//                Object mssv = jTable1.getModel().getValueAt(r, 0);
-//                Object tensv = jTable1.getModel().getValueAt(r, 1);
-//                ResultSet rs = s.executeQuery("SELECT MaLop FROM QLSV.SINHVIEN where MaSV = N'" + mssv + "';");
-//                if (!rs.next()) {
-//                    JOptionPane.showMessageDialog(this, "Lỗi! Không chọn được mã lớp.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                    return;
-//                }
-//                Object malop = rs.getString("MaLop");
-//
-//                return;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//    }
+    private void reloadMaLop() {
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT MaLop FROM QLSV.DM_Lop;");
+            
+            DefaultComboBoxModel<String> CBModel = (DefaultComboBoxModel<String>) MLopComboBox.getModel();
+            
+            while (rs.next()) {
+                CBModel.addElement(rs.getString(1));
+            }
+            CBModel.setSelectedItem("- Mã lớp -");
+            s.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void reloadNamHoc() {
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT NamHoc FROM QLSV.NAMHOC;");
+            
+            DefaultComboBoxModel<String> CBModel = (DefaultComboBoxModel<String>) NamHocComboBox.getModel();
+            
+            while (rs.next()) {
+                CBModel.addElement(rs.getString(1));
+            }
+            CBModel.setSelectedItem(null);
+            s.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void reloadMonHoc() {
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT MaMH FROM QLSV.DM_MonHoc;");
+            
+            DefaultComboBoxModel<String> CBModel = (DefaultComboBoxModel<String>) MaMHComboBox.getModel();
+            
+            while (rs.next()) {
+                CBModel.addElement(rs.getString(1));
+            }
+            CBModel.setSelectedItem(null);
+            s.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void loadDatafromSV(Object mssv) {
+        try {
+            
+            MSSVTextField.setEditable(false);
+            HoTenTextField.setEditable(false);
+            MLopComboBox.setEnabled(false);
+            TenLopTextField.setEditable(false);
+            
+            Statement s = connection.createStatement();
+
+            // lấy dữ liệu và hiển thị lên MSSV và Họ tên 
+            ResultSet rsv = s.executeQuery("SELECT * FROM SINHVIEN WHERE MaSV = N'" + mssv + "';");
+            if (rsv.next()) {
+                MSSVTextField.setText((String) mssv);
+                HoTenTextField.setText((String) rsv.getString(2));
+            } else {
+                JOptionPane.showMessageDialog(this, "Lỗi! Mã số sinh viên không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // lấy dữ liệu và hiển thị lên Mã lớp và Tên lớp
+            reloadMaLop();
+            ResultSet rsl = s.executeQuery("SELECT SINHVIEN.MaLop, DM_Lop.TenLop\n"
+                    + "FROM SINHVIEN\n"
+                    + "INNER JOIN DM_Lop ON SINHVIEN.MaLop = DM_Lop.MaLop\n"
+                    + "WHERE SINHVIEN.MaSV = '" + mssv + "';");
+            if (rsl.next()) {
+                MLopComboBox.setSelectedItem(rsl.getString("MaLop"));
+                TenLopTextField.setText((String) rsl.getString("TenLop"));
+            } else {
+                JOptionPane.showMessageDialog(this, "Lỗi! Mã lớp không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Lấy dữ liệu và hiển thị Năm học
+            reloadNamHoc();
+            ResultSet rsn = s.executeQuery("SELECT NamHoc FROM QLSV.NAMHOC;");
+            if (rsn.next()) {
+                NamHocComboBox.setSelectedItem(rsn.getString(1));
+            } else {
+                JOptionPane.showMessageDialog(this, "Lỗi! Năm học không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // lấy dữ liệu và hiển thị lên mã môn học và môn học
+            reloadMonHoc();
+            MonHocTextField.setText("");
+            
+            s.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -67,8 +153,12 @@ public class NhapDiem extends javax.swing.JDialog {
         NamHocComboBox = new javax.swing.JComboBox<>();
         HocKyLabel = new javax.swing.JLabel();
         HocKyComboBox = new javax.swing.JComboBox<>();
+        MaMHLabel = new javax.swing.JLabel();
+        MaMHComboBox = new javax.swing.JComboBox<>();
+        TenLopLabel = new javax.swing.JLabel();
+        TenLopTextField = new javax.swing.JTextField();
         MonHocLabel = new javax.swing.JLabel();
-        MonHocComboBox = new javax.swing.JComboBox<>();
+        MonHocTextField = new javax.swing.JTextField();
         BottomPanel = new javax.swing.JPanel();
         Diem1Label = new javax.swing.JLabel();
         Diem2Label = new javax.swing.JLabel();
@@ -111,35 +201,56 @@ public class NhapDiem extends javax.swing.JDialog {
 
         TopPanel.setBackground(new java.awt.Color(249, 247, 201));
 
-        MSSVLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        MSSVLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         MSSVLabel.setText("Mã số sinh viên");
 
+        MSSVTextField.setEditable(false);
         MSSVTextField.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
 
-        HoTenLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        HoTenLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         HoTenLabel.setText("Họ và tên");
 
+        HoTenTextField.setEditable(false);
         HoTenTextField.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
 
-        MaLopLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        MaLopLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         MaLopLabel.setText("Mã lớp");
 
         MLopComboBox.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
 
-        NamHocLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        NamHocLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         NamHocLabel.setText("Năm học");
 
         NamHocComboBox.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
 
-        HocKyLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        HocKyLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         HocKyLabel.setText("Học kỳ");
 
         HocKyComboBox.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
+        HocKyComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "hè" }));
+        HocKyComboBox.setSelectedIndex(-1);
 
-        MonHocLabel.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        MaMHLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        MaMHLabel.setText("Mã môn học");
+
+        MaMHComboBox.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
+        MaMHComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                MaMHComboBoxItemStateChanged(evt);
+            }
+        });
+
+        TenLopLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        TenLopLabel.setText("Tên lớp");
+
+        TenLopTextField.setEditable(false);
+        TenLopTextField.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
+
+        MonHocLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         MonHocLabel.setText("Môn học");
 
-        MonHocComboBox.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
+        MonHocTextField.setEditable(false);
+        MonHocTextField.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout TopPanelLayout = new javax.swing.GroupLayout(TopPanel);
         TopPanel.setLayout(TopPanelLayout);
@@ -148,73 +259,78 @@ public class NhapDiem extends javax.swing.JDialog {
             .addGroup(TopPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(MaLopLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(TenLopLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(MSSVLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(HoTenLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(TopPanelLayout.createSequentialGroup()
-                        .addComponent(MSSVTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
-                        .addComponent(NamHocLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(NamHocComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(TopPanelLayout.createSequentialGroup()
-                        .addComponent(HoTenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
-                        .addComponent(HocKyLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(HocKyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(TopPanelLayout.createSequentialGroup()
-                        .addComponent(MLopComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
-                        .addComponent(MonHocLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(MonHocComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                    .addComponent(HoTenLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(MaLopLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(MLopComboBox, 0, 220, Short.MAX_VALUE)
+                    .addComponent(MSSVTextField)
+                    .addComponent(TenLopTextField)
+                    .addComponent(HoTenTextField))
+                .addGap(50, 50, 50)
+                .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(MaMHLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(NamHocLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(MonHocLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(HocKyLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(NamHocComboBox, 0, 220, Short.MAX_VALUE)
+                    .addComponent(MaMHComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(MonHocTextField)
+                    .addComponent(HocKyComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         TopPanelLayout.setVerticalGroup(
             TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(TopPanelLayout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
-                .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(NamHocLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(NamHocComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(MSSVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(MSSVTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
-                .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TopPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(MSSVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MSSVTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NamHocLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NamHocComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(HoTenLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(HoTenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(HocKyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(HocKyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(HoTenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                    .addComponent(HocKyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(MaLopLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(MaLopLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(MLopComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(MaMHLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(MaMHComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(TopPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TenLopLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TenLopTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MonHocLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MonHocComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MLopComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
+                    .addComponent(MonHocTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32))
         );
 
         BottomPanel.setBackground(new java.awt.Color(249, 247, 201));
 
-        Diem1Label.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        Diem1Label.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         Diem1Label.setText("Điểm lần 1");
 
-        Diem2Label.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        Diem2Label.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         Diem2Label.setText("Điểm lần 2");
 
         Diem1TextField.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
 
         Diem2TextField.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
 
-        Diem1Label1.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        Diem1Label1.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         Diem1Label1.setText("Điểm trung bình");
 
-        Diem2Label1.setFont(new java.awt.Font("Helvetica", 1, 14)); // NOI18N
+        Diem2Label1.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         Diem2Label1.setText("Xếp loại");
 
         Diem1TextField1.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
@@ -245,20 +361,20 @@ public class NhapDiem extends javax.swing.JDialog {
         ControlPanelLayout.setHorizontalGroup(
             ControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ControlPanelLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(40, 40, 40)
                 .addComponent(LuuButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addGap(69, 69, 69)
                 .addComponent(SuaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(103, 103, 103)
                 .addComponent(XoaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                 .addComponent(ThoatButton, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
         );
         ControlPanelLayout.setVerticalGroup(
             ControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ControlPanelLayout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
+                .addContainerGap(24, Short.MAX_VALUE)
                 .addGroup(ControlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(LuuButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SuaButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,43 +387,48 @@ public class NhapDiem extends javax.swing.JDialog {
         BottomPanel.setLayout(BottomPanelLayout);
         BottomPanelLayout.setHorizontalGroup(
             BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(ControlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(BottomPanelLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(Diem1Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Diem1Label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(8, 8, 8)
                 .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Diem1Label1, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
-                    .addComponent(Diem1Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Diem1TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Diem1TextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50)
+                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Diem2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Diem2Label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Diem1TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Diem1TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Diem2Label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Diem2Label, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Diem2TextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Diem2TextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-            .addComponent(ControlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Diem2TextField, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                    .addComponent(Diem2TextField1))
+                .addGap(6, 6, 6))
         );
         BottomPanelLayout.setVerticalGroup(
             BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(BottomPanelLayout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
-                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Diem1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Diem1TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Diem2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Diem2TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Diem1Label1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Diem1TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Diem2Label1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Diem2TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addComponent(ControlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BottomPanelLayout.createSequentialGroup()
+                        .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Diem1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Diem1TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Diem2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Diem2TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(BottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Diem2Label1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Diem2TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Diem1TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BottomPanelLayout.createSequentialGroup()
+                        .addComponent(Diem1Label1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(22, 22, 22)))
+                .addComponent(ControlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48))
         );
 
         javax.swing.GroupLayout UnderPanelLayout = new javax.swing.GroupLayout(UnderPanel);
@@ -320,9 +441,9 @@ public class NhapDiem extends javax.swing.JDialog {
         UnderPanelLayout.setVerticalGroup(
             UnderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(UnderPanelLayout.createSequentialGroup()
-                .addComponent(TopPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(TopPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(BottomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(BottomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 192, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -330,12 +451,12 @@ public class NhapDiem extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(HeaderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(UnderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(UnderPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(HeaderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(HeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(UnderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -344,10 +465,27 @@ public class NhapDiem extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void MaMHComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_MaMHComboBoxItemStateChanged
+        
+        try {
+            Statement s = connection.createStatement();
+            
+            ResultSet rsm = s.executeQuery("SELECT TenMH FROM QLSV.DM_MonHoc WHERE MaMH = '" + evt.getItem() + "';");
+            if (rsm.next()) {
+                MonHocTextField.setText((String) rsm.getString("TenMH"));
+            } else {
+                JOptionPane.showMessageDialog(this, "Lỗi! Mã môn học không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+            s.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(NhapDiem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_MaMHComboBoxItemStateChanged
+
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BottomPanel;
@@ -370,11 +508,15 @@ public class NhapDiem extends javax.swing.JDialog {
     private javax.swing.JLabel MSSVLabel;
     private javax.swing.JTextField MSSVTextField;
     private javax.swing.JLabel MaLopLabel;
-    private javax.swing.JComboBox<String> MonHocComboBox;
+    private javax.swing.JComboBox<String> MaMHComboBox;
+    private javax.swing.JLabel MaMHLabel;
     private javax.swing.JLabel MonHocLabel;
+    private javax.swing.JTextField MonHocTextField;
     private javax.swing.JComboBox<String> NamHocComboBox;
     private javax.swing.JLabel NamHocLabel;
     private javax.swing.JButton SuaButton;
+    private javax.swing.JLabel TenLopLabel;
+    private javax.swing.JTextField TenLopTextField;
     private javax.swing.JButton ThoatButton;
     private javax.swing.JLabel TitleLabel;
     private javax.swing.JPanel TopPanel;
