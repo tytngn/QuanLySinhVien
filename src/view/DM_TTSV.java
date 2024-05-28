@@ -93,7 +93,7 @@ public class DM_TTSV extends javax.swing.JFrame {
         reload();
     }
 
-    private void reload() {
+    public void reload() {
         try {
 
             Statement s = connection.createStatement();
@@ -358,6 +358,7 @@ public class DM_TTSV extends javax.swing.JFrame {
             }
         });
         jTable1.setGridColor(new java.awt.Color(0, 0, 0));
+        jTable1.setRowHeight(35);
         jTable1.setShowGrid(true);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -574,7 +575,6 @@ public class DM_TTSV extends javax.swing.JFrame {
             reload();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Lỗi!", JOptionPane.ERROR_MESSAGE);
-
         }
     }//GEN-LAST:event_XoaButtonActionPerformed
 

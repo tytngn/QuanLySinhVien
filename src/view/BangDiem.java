@@ -86,50 +86,95 @@ public class BangDiem extends javax.swing.JFrame {
                 .build();
 
         Program.connectToDatabase();
-        reload();
+        reloadNamHoc();
     }
 
-    private void reload() {
+    //reload Điểm theo MaSV - Năm học - Học kỳ
+    private void reloadDiem() {
         try {
-
             Statement s = connection.createStatement();
-            ResultSet rs = s.executeQuery("select * from BANGDIEM");
+
+            String MaSV = MSSVTextField.getText().toString();
+            String NamHoc = NamHocComboBox.getSelectedItem().toString();
+            String HocKy = HocKyComboBox.getSelectedItem().toString();
 
             DefaultTableModel m = (DefaultTableModel) BangDiemTable.getModel();
             m.setRowCount(0);
-            while (rs.next()) {
-                Object[] obj = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)};
-                m.addRow(obj);
+            ResultSet rs = s.executeQuery("SELECT TenSV, NamSinh from SINHVIEN WHERE MaSV= '" + MaSV + "';");
+            if (rs.next()) {
+                HoTenTextField.setText(rs.getString(1));
+                NamSinhTextField.setText(rs.getString(2));
+            } else {
+                JOptionPane.showMessageDialog(this, "Mã sinh viên không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                m.setRowCount(0);
+                HoTenTextField.setText("");
+                TBTextField.setText("");
+                XepLoaiTextField.setText("");
             }
-            reloadMaLop();
-            s.close();
-        } catch (Exception e) {
-        }
+            rs = s.executeQuery("SELECT MaMH, Diem1, Diem2, DiemTB, XepLoai \n"
+                    + "FROM BANGDIEM \n"
+                    + "WHERE MaSV = '" + MaSV + "' \n"
+                    + "  AND NamHoc = '" + NamHoc + "' \n"
+                    + "  AND HocKy = '" + HocKy + "';");
 
-    }
+            if (rs.next()) {
+                float avg = 0;
+                do {
+                    Object[] obj = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)};
+                    m.addRow(obj);
+                    avg += rs.getFloat(4);
+                } while (rs.next());
+                avg = avg / m.getRowCount();
+                TBTextField.setText(String.valueOf(avg));
+                XepLoaiTextField.setText(xepLoai(avg));
+            } else {
+                m.setRowCount(0);
+                TBTextField.setText("");
+                XepLoaiTextField.setText("");
 
-    private void setTF() {
-        MSSVTextField.setText("");
-        HoTenTextField.setText("");
-        NamSinhTextField.setText("");
-        MLopComboBox.setSelectedItem("- Mã lớp -");
-    }
-
-    public void reloadMaLop() {
-        try {
-            Statement s = connection.createStatement();
-            ResultSet rs = s.executeQuery("SELECT MaLop FROM QLSV.DM_Lop;");
-
-            DefaultComboBoxModel<String> CBModel = (DefaultComboBoxModel<String>) MLopComboBox.getModel();
-
-            while (rs.next()) {
-                CBModel.addElement(rs.getString(1));
             }
-            CBModel.setSelectedItem("- Mã lớp -");
             s.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public static String xepLoai(float diemTB) {
+        if (diemTB >= 8.0) {
+            return "Giỏi";
+        } else if (diemTB >= 6.5) {
+            return "Khá";
+        } else if (diemTB >= 5.0) {
+            return "Trung bình";
+        } else {
+            return "Yếu";
+        }
+    }
+
+    // Load năm học lên JComboBox
+    private void reloadNamHoc() {
+        try {
+            Statement s = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT NamHoc FROM QLSV.NAMHOC;");
+
+            DefaultComboBoxModel<String> CBModel = (DefaultComboBoxModel<String>) NamHocComboBox.getModel();
+
+            while (rs.next()) {
+                CBModel.addElement(rs.getString(1));
+            }
+            CBModel.setSelectedItem(null);
+            s.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Đặt lại giá trị các trường dữ liệu là rỗng
+    private void setTF() {
+        MSSVTextField.setText("");
+        NamHocComboBox.setSelectedIndex(-1);
+        HocKyComboBox.setSelectedIndex(-1);
     }
 
     /**
@@ -148,18 +193,16 @@ public class BangDiem extends javax.swing.JFrame {
         UnderPanel = new javax.swing.JPanel();
         LeftPanel = new javax.swing.JPanel();
         MSSVLabel = new javax.swing.JLabel();
-        HoTenLabel = new javax.swing.JLabel();
-        NamSinhLabel = new javax.swing.JLabel();
-        MaLopLabel = new javax.swing.JLabel();
         MSSVTextField = new javax.swing.JTextField();
-        HoTenTextField = new javax.swing.JTextField();
-        NamSinhTextField = new javax.swing.JTextField();
-        MLopComboBox = new javax.swing.JComboBox<>();
         NamHocLabel = new javax.swing.JLabel();
         NamHocComboBox = new javax.swing.JComboBox<>();
         HocKyLabel = new javax.swing.JLabel();
         HocKyComboBox = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        LietKeBtn = new javax.swing.JButton();
+        HoTenLabel = new javax.swing.JLabel();
+        HoTenTextField = new javax.swing.JTextField();
+        NamSinhLabel = new javax.swing.JLabel();
+        NamSinhTextField = new javax.swing.JTextField();
         RightPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         BangDiemTable = new javax.swing.JTable();
@@ -230,22 +273,7 @@ public class BangDiem extends javax.swing.JFrame {
         MSSVLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         MSSVLabel.setText("Mã số sinh viên");
 
-        HoTenLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
-        HoTenLabel.setText("Họ và tên");
-
-        NamSinhLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
-        NamSinhLabel.setText("Năm sinh");
-
-        MaLopLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
-        MaLopLabel.setText("Mã lớp");
-
         MSSVTextField.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
-
-        HoTenTextField.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
-
-        NamSinhTextField.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
-
-        MLopComboBox.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
 
         NamHocLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         NamHocLabel.setText("Năm học");
@@ -256,9 +284,30 @@ public class BangDiem extends javax.swing.JFrame {
         HocKyLabel.setText("Học kỳ");
 
         HocKyComboBox.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
+        HocKyComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3" }));
+        HocKyComboBox.setSelectedIndex(-1);
 
-        jButton1.setFont(new java.awt.Font("Helvetica", 1, 24)); // NOI18N
-        jButton1.setText("Liệt kê");
+        LietKeBtn.setFont(new java.awt.Font("Helvetica", 1, 24)); // NOI18N
+        LietKeBtn.setText("Liệt kê");
+        LietKeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LietKeBtnActionPerformed(evt);
+            }
+        });
+
+        HoTenLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        HoTenLabel.setText("Họ và tên");
+
+        HoTenTextField.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
+        HoTenTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        HoTenTextField.setEnabled(false);
+
+        NamSinhLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        NamSinhLabel.setText("Năm sinh");
+
+        NamSinhTextField.setFont(new java.awt.Font("Helvetica", 0, 16)); // NOI18N
+        NamSinhTextField.setDisabledTextColor(new java.awt.Color(0, 0, 0));
+        NamSinhTextField.setEnabled(false);
 
         javax.swing.GroupLayout LeftPanelLayout = new javax.swing.GroupLayout(LeftPanel);
         LeftPanel.setLayout(LeftPanelLayout);
@@ -267,24 +316,22 @@ public class BangDiem extends javax.swing.JFrame {
             .addGroup(LeftPanelLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(NamSinhLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(MSSVLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(MaLopLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(NamHocLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(HocKyLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(HoTenLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(HocKyLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(NamSinhLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(35, 35, 35)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(HoTenTextField)
-                    .addComponent(NamSinhTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
                     .addComponent(MSSVTextField, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(MLopComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(NamHocComboBox, 0, 255, Short.MAX_VALUE)
-                    .addComponent(HocKyComboBox, 0, 255, Short.MAX_VALUE))
+                    .addComponent(HocKyComboBox, 0, 255, Short.MAX_VALUE)
+                    .addComponent(HoTenTextField)
+                    .addComponent(NamSinhTextField))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LeftPanelLayout.createSequentialGroup()
                 .addContainerGap(172, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(LietKeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(153, 153, 153))
         );
         LeftPanelLayout.setVerticalGroup(
@@ -294,29 +341,25 @@ public class BangDiem extends javax.swing.JFrame {
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(MSSVLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(MSSVTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(35, 35, 35)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(HoTenLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(HoTenTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(53, 53, 53)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(NamSinhLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(NamSinhTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(MaLopLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(MLopComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                    .addComponent(NamSinhTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NamSinhLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(NamHocLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(NamHocComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(NamHocComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(NamHocLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(48, 48, 48)
                 .addGroup(LeftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(HocKyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(HocKyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(66, 66, 66)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(53, 53, 53))
+                .addGap(39, 39, 39)
+                .addComponent(LietKeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
         );
 
         RightPanel.setBackground(new java.awt.Color(249, 247, 201));
@@ -343,23 +386,23 @@ public class BangDiem extends javax.swing.JFrame {
             }
         });
         BangDiemTable.setGridColor(new java.awt.Color(0, 0, 0));
+        BangDiemTable.setRowHeight(35);
         BangDiemTable.setShowGrid(true);
-        BangDiemTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BangDiemTableMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(BangDiemTable);
 
         XepLoaiLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         XepLoaiLabel.setText("Xếp loại");
 
-        TBTextField.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
+        TBTextField.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        TBTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        TBTextField.setEnabled(false);
 
         TBLabel.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
         TBLabel.setText("Trung bình học kỳ");
 
-        XepLoaiTextField.setFont(new java.awt.Font("Helvetica", 0, 14)); // NOI18N
+        XepLoaiTextField.setFont(new java.awt.Font("Helvetica", 1, 18)); // NOI18N
+        XepLoaiTextField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        XepLoaiTextField.setEnabled(false);
 
         javax.swing.GroupLayout RightPanelLayout = new javax.swing.GroupLayout(RightPanel);
         RightPanel.setLayout(RightPanelLayout);
@@ -436,18 +479,9 @@ public class BangDiem extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_MenuLabelMouseClicked
 
-    private void BangDiemTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BangDiemTableMouseClicked
-        int e = evt.getClickCount();
-        if (e == 2) {
-            int r = BangDiemTable.getSelectedRow();
-
-            if (r == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-
-        }
-    }//GEN-LAST:event_BangDiemTableMouseClicked
+    private void LietKeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LietKeBtnActionPerformed
+        reloadDiem();
+    }//GEN-LAST:event_LietKeBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -458,10 +492,9 @@ public class BangDiem extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> HocKyComboBox;
     private javax.swing.JLabel HocKyLabel;
     private javax.swing.JPanel LeftPanel;
-    private javax.swing.JComboBox<String> MLopComboBox;
+    private javax.swing.JButton LietKeBtn;
     private javax.swing.JLabel MSSVLabel;
     private javax.swing.JTextField MSSVTextField;
-    private javax.swing.JLabel MaLopLabel;
     private javax.swing.JLabel MenuLabel;
     private javax.swing.JPanel MiddelPanel1;
     private javax.swing.JComboBox<String> NamHocComboBox;
@@ -475,7 +508,6 @@ public class BangDiem extends javax.swing.JFrame {
     private javax.swing.JPanel UnderPanel;
     private javax.swing.JLabel XepLoaiLabel;
     private javax.swing.JTextField XepLoaiTextField;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

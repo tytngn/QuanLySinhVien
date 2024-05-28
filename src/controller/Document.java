@@ -4,6 +4,8 @@
  */
 package controller;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
@@ -14,6 +16,7 @@ import javax.swing.text.DocumentFilter;
  */
 public class Document {
 
+    // Trường hợp đối với mã số sinh viên chỉ chứa ký tự chữ cái và chữ số
     public static class MaSoDocumentFilter extends DocumentFilter {
 
         @Override
@@ -38,6 +41,7 @@ public class Document {
         }
     }
 
+    // Trường hợp đối với Họ tên chỉ chứa các ký tự chữ cái
     public static class VNDocumentFilter extends DocumentFilter {
 
         @Override
@@ -70,25 +74,31 @@ public class Document {
             return text.matches("[\\p{L} \\s]*");
         }
     }
-
-    public static class NumberDocumentFilter extends DocumentFilter {
-
-        @Override
-        public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
-            if (isNumbers(text)) {
-                super.insertString(fb, offset, text, attr);
-            }
-        }
-
-        @Override
-        public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-            if (isNumbers(text)) {
-                super.replace(fb, offset, length, text, attrs);
-            }
-        }
-
-        private boolean isNumbers(String text) {
-            return text.matches("\\d*");
+    
+    // Trường hợp chấp nhận chuỗi đầu vào là số thực
+    public static class RealNumberFilter extends DocumentFilter {
+    @Override
+    public void insertString(DocumentFilter.FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+        // Chỉ chấp nhận các ký tự số và dấu chấm
+        if (isValid(text)) {
+            super.insertString(fb, offset, text, attr);
         }
     }
+
+    @Override
+    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        // Chỉ chấp nhận các ký tự số và dấu chấm
+        if (isValid(text)) {
+            super.replace(fb, offset, length, text, attrs);
+        }
+    }
+
+    private boolean isValid(String text) {
+        // Kiểm tra xem chuỗi có chỉ chứa số và dấu chấm không
+        return text.matches("\\d*\\.?\\d*");
+    }
 }
+
+    
+}
+

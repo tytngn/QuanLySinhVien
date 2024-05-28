@@ -122,9 +122,9 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="MLopComboBox" alignment="0" pref="220" max="32767" attributes="0"/>
-                          <Component id="MSSVTextField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="MSSVTextField" alignment="0" pref="220" max="32767" attributes="0"/>
                           <Component id="TenLopTextField" alignment="0" max="32767" attributes="0"/>
+                          <Component id="MaLopTextField" alignment="0" max="32767" attributes="0"/>
                           <Component id="HoTenTextField" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
@@ -158,15 +158,15 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="HoTenLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="HoTenTextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           <Component id="HocKyLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           <Component id="HocKyComboBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="HoTenTextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="MaLopLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                              <Component id="MLopComboBox" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="MaLopTextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="MaMHLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
@@ -197,9 +197,16 @@
             <Component class="javax.swing.JTextField" name="MSSVTextField">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="14" style="0"/>
                 </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="HoTenLabel">
@@ -210,12 +217,19 @@
                 <Property name="text" type="java.lang.String" value="H&#x1ecd; v&#xe0; t&#xea;n"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="HoTenTextField">
+            <Component class="javax.swing.JTextField" name="MaLopTextField">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="14" style="0"/>
                 </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="MaLopLabel">
@@ -225,19 +239,6 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="M&#xe3; l&#x1edb;p"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="MLopComboBox">
-              <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Helvetica" size="14" style="0"/>
-                </Property>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
-                </Property>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="NamHocLabel">
               <Properties>
@@ -256,6 +257,9 @@
                   <StringArray count="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="NamHocComboBoxItemStateChanged"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
@@ -277,11 +281,14 @@
                   <StringArray count="3">
                     <StringItem index="0" value="1"/>
                     <StringItem index="1" value="2"/>
-                    <StringItem index="2" value="h&#xe8;"/>
+                    <StringItem index="2" value="3"/>
                   </StringArray>
                 </Property>
                 <Property name="selectedIndex" type="int" value="-1"/>
               </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="HocKyComboBoxItemStateChanged"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
@@ -321,9 +328,16 @@
             <Component class="javax.swing.JTextField" name="TenLopTextField">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="14" style="0"/>
                 </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="MonHocLabel">
@@ -337,9 +351,31 @@
             <Component class="javax.swing.JTextField" name="MonHocTextField">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="14" style="0"/>
                 </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="HoTenTextField">
+              <Properties>
+                <Property name="editable" type="boolean" value="false"/>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Helvetica" size="14" style="0"/>
+                </Property>
+                <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="0" type="rgb"/>
+                </Property>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -359,22 +395,22 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="Diem1Label" max="32767" attributes="0"/>
-                          <Component id="Diem1Label1" max="32767" attributes="0"/>
+                          <Component id="DiemTBLabel" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="8" pref="8" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="Diem1TextField" min="-2" pref="220" max="-2" attributes="0"/>
-                          <Component id="Diem1TextField1" alignment="1" min="-2" pref="220" max="-2" attributes="0"/>
+                          <Component id="DiemTBTextField" alignment="1" min="-2" pref="220" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="Diem2Label" min="-2" pref="105" max="-2" attributes="0"/>
-                          <Component id="Diem2Label1" max="32767" attributes="0"/>
+                          <Component id="XepLoaiLabel" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="Diem2TextField" pref="220" max="32767" attributes="0"/>
-                          <Component id="Diem2TextField1" max="32767" attributes="0"/>
+                          <Component id="XepLoaiTextField" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   </Group>
@@ -394,14 +430,14 @@
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="Diem2Label1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <Component id="Diem2TextField1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <Component id="Diem1TextField1" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="XepLoaiLabel" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="XepLoaiTextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="DiemTBTextField" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <Component id="Diem1Label1" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="DiemTBLabel" min="-2" pref="30" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -442,7 +478,7 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="Diem1Label1">
+            <Component class="javax.swing.JLabel" name="DiemTBLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="18" style="1"/>
@@ -450,7 +486,7 @@
                 <Property name="text" type="java.lang.String" value="&#x110;i&#x1ec3;m trung b&#xec;nh"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="Diem2Label1">
+            <Component class="javax.swing.JLabel" name="XepLoaiLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="18" style="1"/>
@@ -458,14 +494,14 @@
                 <Property name="text" type="java.lang.String" value="X&#x1ebf;p lo&#x1ea1;i"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="Diem1TextField1">
+            <Component class="javax.swing.JTextField" name="DiemTBTextField">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="14" style="0"/>
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="Diem2TextField1">
+            <Component class="javax.swing.JTextField" name="XepLoaiTextField">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Helvetica" size="14" style="0"/>
@@ -483,15 +519,13 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                          <Component id="LuuButton" min="-2" pref="103" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
-                          <Component id="SuaButton" min="-2" pref="103" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="103" max="-2" attributes="0"/>
+                          <Component id="LuuButton" min="-2" pref="103" max="-2" attributes="0"/>
+                          <EmptySpace pref="133" max="32767" attributes="0"/>
                           <Component id="XoaButton" min="-2" pref="103" max="-2" attributes="0"/>
-                          <EmptySpace pref="105" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
                           <Component id="ThoatButton" min="-2" pref="103" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="88" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -501,7 +535,6 @@
                           <EmptySpace pref="24" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="LuuButton" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
-                              <Component id="SuaButton" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                               <Component id="XoaButton" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                               <Component id="ThoatButton" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                           </Group>
@@ -521,18 +554,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="L&#x1b0;u"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JButton" name="SuaButton">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Helvetica" size="20" style="1"/>
-                    </Property>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/asserts/icons8-edit-20.png"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="S&#x1eed;a"/>
-                    <Property name="iconTextGap" type="int" value="7"/>
-                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="LuuButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="XoaButton">
                   <Properties>
@@ -544,6 +568,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Xo&#xe1;"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="XoaButtonActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="ThoatButton">
                   <Properties>
@@ -555,6 +582,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Tho&#xe1;t"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ThoatButtonActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
